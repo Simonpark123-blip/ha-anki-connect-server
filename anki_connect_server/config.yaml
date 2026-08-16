@@ -1,5 +1,5 @@
 name: AnkiConnect Server
-version: "0.2.0-1"
+version: "0.2.1"
 slug: anki_connect_server
 description: Headless AnkiConnect API server with optional AnkiWeb sync for Home Assistant OS
 url: https://github.com/glechic/anki-connect-server
