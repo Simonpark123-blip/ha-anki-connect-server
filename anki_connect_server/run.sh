@@ -18,8 +18,38 @@ export ANKICONNECT_FULL_UPLOAD="$FULL_UPLOAD"
 mkdir -p /share/anki
 chmod 777 /share/anki
 
+echo "===== ANKI DEBUG ====="
+echo "[DEBUG] PWD:"
+pwd
+
+echo "[DEBUG] /app:"
+ls -la /app || true
+
+echo "[DEBUG] /share:"
+ls -la /share || true
+
+echo "[DEBUG] /share/anki:"
+ls -la /share/anki || true
+
+echo "[DEBUG] Collection:"
+ls -la "$ANKI_COLLECTION_PATH" || true
+
+echo "[DEBUG] Collection directory:"
+ls -ld /share/anki || true
+
+echo "[DEBUG] Collection stat:"
+stat "$ANKI_COLLECTION_PATH" || true
+
+echo "[DEBUG] Collection permissions:"
+ls -l "$ANKI_COLLECTION_PATH" || true
+
+echo "===== END DEBUG ====="
+
 if [ -f "$ANKI_COLLECTION_PATH" ]; then
     chmod 666 "$ANKI_COLLECTION_PATH"
+else
+    echo "[ERROR] Collection not found: $ANKI_COLLECTION_PATH"
+    exit 1
 fi
 
 if [ ! -f "$ANKI_COLLECTION_PATH" ]; then
