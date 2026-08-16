@@ -15,10 +15,17 @@ export ANKICONNECT_ANKIWEB_USER="$ANKIWEB_USER"
 export ANKICONNECT_ANKIWEB_PASS="$ANKIWEB_PASS"
 export ANKICONNECT_FULL_UPLOAD="$FULL_UPLOAD"
 
+mkdir -p /share/anki
+chmod 777 /share/anki
+
+if [ -f "$ANKI_COLLECTION_PATH" ]; then
+    chmod 666 "$ANKI_COLLECTION_PATH"
+fi
+
 if [ ! -f "$ANKI_COLLECTION_PATH" ]; then
-  echo "[ERROR] Collection not found: $ANKI_COLLECTION_PATH"
-  echo "[ERROR] Create /share/anki and place your initial collection.anki21 there."
-  exit 1
+    echo "[ERROR] Collection not found: $ANKI_COLLECTION_PATH"
+    echo "[ERROR] Create /share/anki and place your initial collection.anki21 there."
+    exit 1
 fi
 
 echo "[INFO] Starting AnkiConnect on 0.0.0.0:8765"
@@ -29,7 +36,7 @@ python -m uvicorn anki_connect_server.api:app --host 0.0.0.0 --port 8765 &
 SERVER_PID=$!
 
 cleanup() {
-  kill "$SERVER_PID" 2>/dev/null || true
+    kill "$SERVER_PID" 2>/dev/null || true
 }
 trap cleanup INT TERM EXIT
 
