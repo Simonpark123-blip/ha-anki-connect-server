@@ -1,0 +1,35 @@
+name: AnkiConnect Server
+version: "0.2.0-1"
+slug: anki_connect_server
+description: Headless AnkiConnect API server with optional AnkiWeb sync for Home Assistant OS
+url: https://github.com/glechic/anki-connect-server
+arch:
+  - aarch64
+startup: application
+boot: auto
+init: false
+apparmor: false
+
+ports:
+  8765/tcp: 8765
+ports_description:
+  8765/tcp: AnkiConnect API
+
+map:
+  - type: share
+    read_only: false
+
+options:
+  ankiweb_user: ""
+  ankiweb_password: ""
+  sync_interval: 300
+  full_upload: false
+
+schema:
+  ankiweb_user: email
+  ankiweb_password: password
+  sync_interval: int(60,86400)
+  full_upload: bool
+
+backup: hot
+stage: experimental
