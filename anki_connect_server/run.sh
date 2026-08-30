@@ -8,6 +8,7 @@ ANKIWEB_PASS="$(python -c 'import json; print(json.load(open("/data/options.json
 SYNC_INTERVAL="$(python -c 'import json; print(json.load(open("/data/options.json")).get("sync_interval",300))')"
 FULL_UPLOAD="$(python -c 'import json; print(str(json.load(open("/data/options.json")).get("full_upload",False)).lower())')"
 
+export ANKICONNECT_COLLECTION_PATH="/share/anki/collection.anki21"
 export ANKI_COLLECTION_PATH="/share/anki/collection.anki21"
 export ANKICONNECT_PORT="8765"
 export ANKICONNECT_BIND="0.0.0.0"
