@@ -68,6 +68,54 @@ echo "[INFO] AnkiWeb sync interval: ${SYNC_INTERVAL}s"
 
 cd /share/anki
 
+echo "[DEBUG] Package versions:"
+python - <<'PY'
+import anki
+import anki_connect_server
+import sqlite3
+
+print("anki:", getattr(anki, "__version__", "unknown"))
+print("anki_connect_server:", getattr(anki_connect_server, "__version__", "unknown"))
+print("sqlite:", sqlite3.sqlite_version)
+PY
+
+echo "[DEBUG] Anki collection test:"
+python - <<'PY'
+from anki.collection import Collection
+
+path = "/share/anki/collection.anki21"
+
+print("Opening Anki Collection:", path)
+
+try:
+    col = Collection(path)
+    print("ANKI COLLECTION OPEN OK")
+    print("Decks:", len(col.decks.all_names_and_ids()))
+    col.close()
+except Exception as e:
+    print("ANKI COLLECTION ERROR:", repr(e))
+    raise
+PY
+
+python - <<'PY'
+import sqlite3
+
+p="/share/anki/collection.anki21"
+
+db=sqlite3.connect(p)
+
+print("SQLite:", db.execute("select sqlite_version()").fetchone())
+
+print("Tables:")
+for row in db.execute("select name from sqlite_master where type='table' order by name"):
+    print(" ", row[0])
+
+print("PRAGMA user_version:", db.execute("pragma user_version").fetchone())
+print("PRAGMA journal_mode:", db.execute("pragma journal_mode").fetchone())
+
+db.close()
+PY
+
 python -m uvicorn anki_connect_server.api:app --host 0.0.0.0 --port 8765 &
 SERVER_PID=$!
 
