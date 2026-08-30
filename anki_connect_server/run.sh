@@ -27,7 +27,41 @@ if [ ! -f "$ANKI_COLLECTION_PATH" ]; then
     echo "[ERROR] Create /share/anki and place your initial collection.anki21 there."
     exit 1
 fi
+echo "[DEBUG] User:"
+id
 
+echo "[DEBUG] /share:"
+ls -ld /share
+
+echo "[DEBUG] /share/anki:"
+ls -ld /share/anki
+
+echo "[DEBUG] Collection:"
+ls -l "$ANKI_COLLECTION_PATH"
+
+echo "[DEBUG] Write test:"
+touch /share/anki/.anki_write_test
+ls -l /share/anki/.anki_write_test
+rm -f /share/anki/.anki_write_test
+
+echo "[DEBUG] Python SQLite test:"
+python - <<'PY'
+import sqlite3
+
+path = "/share/anki/collection.anki21"
+
+print("Opening:", path)
+
+try:
+    db = sqlite3.connect(path)
+    print("SQLite OPEN OK")
+    db.execute("PRAGMA journal_mode")
+    print("Journal mode OK")
+    db.close()
+except Exception as e:
+    print("SQLite ERROR:", repr(e))
+    raise
+PY
 echo "[INFO] Starting AnkiConnect on 0.0.0.0:8765"
 echo "[INFO] Collection: $ANKI_COLLECTION_PATH"
 echo "[INFO] AnkiWeb sync interval: ${SYNC_INTERVAL}s"
