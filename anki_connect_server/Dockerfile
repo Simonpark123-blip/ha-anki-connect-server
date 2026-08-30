@@ -7,7 +7,7 @@ LABEL   io.hass.version="${BUILD_VERSION}"   io.hass.type="app"   io.hass.arch="
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir --disable-pip-version-check anki-connect-server==0.2.0
+RUN pip install --no-cache-dir --disable-pip-version-check anki-connect-server==0.2.6
 
 COPY run.sh /run.sh
 COPY sync_loop.py /sync_loop.py
